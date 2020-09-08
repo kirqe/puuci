@@ -7,7 +7,7 @@ What's up with the name? - Those are just the first letters of the model names u
 Users can submit projects, issues and comment on issues. 
 Issues and projects can have files(uploads) attached to them.
 
-### How to to run
+### How to run
 
 To view emails install [mailcatcher](https://github.com/sj26/mailcatcher):
 
