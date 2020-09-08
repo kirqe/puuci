@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
 
-  post '/comments' do
+  post '/comments', :auth => ["user", "admin"]  do
     @issue = Issue.find(params[:comment][:issue_id])
     @comment = @issue.comments.build(user: current_user, message: params[:comment][:message])
     

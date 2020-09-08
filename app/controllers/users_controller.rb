@@ -19,8 +19,6 @@ class UsersController < ApplicationController
     npc = params[:user][:password_confirmation]
     op = params[:user][:old_password]
 
-    # if invitation token is valid you can update username and set password
-    # after user is updated the old token gets invalidated
     if params[:a] && params[:a] == @user.auth_token
       # @user.username = params[:user][:username]
       @user.password = np
@@ -35,9 +33,6 @@ class UsersController < ApplicationController
       end
     end
 
-
-    
-
     if @user.save
       flash :success, "Updated successfully"
       redirect "/u/#{@user.username}"
@@ -46,7 +41,7 @@ class UsersController < ApplicationController
       redirect "/settings?a=#{params[:a]}"
     end
 
-     slim :'users/edit'
+    slim :'users/edit'
   end
 
 
