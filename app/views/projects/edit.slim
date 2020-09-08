@@ -1,0 +1,45 @@
+div class="container-fluid" id="edit-project-page"
+  h5 Edit project 
+  div class="row"
+    div class="col-md-6"
+      form name="project" enctype="multipart/form-data" method='PATCH' class="mb-2" id="edit-project-form"
+        input type="hidden" name="project[project_id]" value="#{@project.id}"
+
+        div class="form-row"
+          div class="form-group col-md-9"
+            input type="text" name="project[name]" value="#{@project.name}" placeholder="Describe the project in one sentence" class="form-control" id="name-field"
+            div id="name-field-feedback" class="invalid-feedback"
+
+          div class="form-group col-md-3"
+            select name="project[priority]" class="custom-select"
+              - Project.priorities.each do |k, v|    
+                option[value="#{v}", selected=("selected" if k=="#{@project.priority}")]
+                  = k    
+
+        div class="form-group"  
+          textarea type="text" name="project[note]" placeholder="Provide more details here. Feel free to use markdown.
+          e.g. # H1 `inline code` **bold**" class="form-control" rows="10" id="note-field" =@project.note
+
+        div class="form-group"
+          div class="custom-file"
+            input type="file" name="file" class="custom-file-input" multiple="multiple" id="file-field" 
+            label class="custom-file-label" for="customFile" Choose file(s)
+        
+        input type="submit" value="Submit" class="btn btn-primary mb-3 mr-2"        
+        a href="/projects/#{@project.id}" class="btn btn-outline-primary mb-3" Cancel
+
+      div class="uploads"
+        - @project.uploads.each do |upload|          
+          div class="upload mb-3"
+            a> href="/uploads/#{upload.id}" data-confirm="Are you sure?" data-method="delete"
+              i class="far fa-trash-alt" style="color: #e11d1d;" aria-hidden="true"
+            span: a href="/s/#{upload.uploadable_id}/#{upload.id}#{upload.ext}" target="_blank" #{upload.filename}
+            br
+            div class="progress"
+              div class="progress-bar progress-bar-striped" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" 100%
+
+    div class="col-md-6"
+      div id="md-preview" class="d-none mb-3 mr-2"
+        span class="badge badge-secondary float-right" Issue
+        h1 id="md-preview-name"
+        p id="md-preview-note"

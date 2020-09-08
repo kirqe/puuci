@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title puuci
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    link rel="stylesheet" href="/assets/build/main.css?ver=#{rand(1..1000)}" crossorigin="anonymous"
+
+  body
+    div style="position: fixed; top: 20px; right: 20px; z-index: 9999;" id="toaster"
+    
+    == slim :header
+    == slim :alert, locals: { mx: true }
+    == yield
+
+  script src="/assets/build/bundle.js"
+
+
+

@@ -1,0 +1,93 @@
+doctype html
+html
+  head
+    title puuci
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    link rel="stylesheet" href="/assets/build/main.css" crossorigin="anonymous"
+
+  body
+    div style="position: fixed; top: 20px; right: 20px; z-index: 9999;" id="toaster"
+    
+    == slim :header
+    == slim :alert, locals: { mx: true }
+    == yield
+
+  script type="text/javascript" src="/assets/javascripts/cable.js"
+  script src="/assets/build/bundle.js"
+
+  javascript:
+    var roomId = "1";
+    var user = "#{{ current_user }}";
+    var socketId = Date.now();
+
+    
+    var toaster = document.getElementById("toaster");
+
+
+    var escape = function(str) {
+      return ('' + str).replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;')
+                      .replace(/"/g, '&quot;');
+    }
+
+    var addToast = function(data) {
+      let username = data['user']
+
+      let resource_type = data['message']['type']
+      let name = JSON.parse(data['message']['resource']).name
+ 
+      let url = ""
+
+      if (resource_type == "Issue") {
+        url = "/issues/" +JSON.parse(data['message']['resource']).id
+      } else if (resource_type == "Project") {
+        url = "/projects/" + JSON.parse(data['message']['resource']).id
+      }
+      var newToast = document.createElement("div")
+      newToast.setAttribute("class", "toast")
+      newToast.setAttribute("role", "alert")
+      newToast.setAttribute("aria-live", "assertive")
+      newToast.setAttribute("aria-atomic", "true")
+      newToast.setAttribute("style", "min-width: 300px; opacity: 1")
+      newToast.innerHTML = `
+              <div class="toast-header">
+                <strong class="mr-auto"> New ${resource_type}</strong>
+                
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="toast-body">
+                <a href="/u/${username}" target="blank">${username}</a> has just submitted a new ${resource_type.toLowerCase()}: 
+                <a href="${url}" target="blank">${name}</a>
+              </div>`
+
+      toaster.insertAdjacentElement('beforeend', newToast)
+
+      setTimeout(() => newToast.remove(), 5000)
+    }
+
+
+    ActionCable.startDebugging();
+    var consumer = ActionCable.createConsumer('#{{ CABLE_URL }}?sid=' + socketId);
+
+    var chatChannel = consumer.subscriptions.create(
+      { channel: 'room', id: "global" },
+      {
+        connected: function(){
+          console.log("Connected");
+          
+        },
+
+        disconnected: function(){
+          console.log("Connected");
+          
+        },
+
+        received: function(data){
+          console.log("Received", data);
+          addToast(data)
+        }
+      }
+    )

@@ -1,0 +1,42 @@
+div class="container-fluid" id="new-issue-page"
+  h5 
+    | New Issue for:
+    a href="/projects/#{@project.id}" target="_blank" #{@project.name}
+
+  div class="row"
+    div class="col-md-6"
+      form name="issue" enctype="multipart/form-data" method='POST' class="pd-view-issue-form mb-2" id="new-issue-form" 
+        input type="hidden" name="issue[project_id]" value="#{@project.id}"
+        input type="hidden" name="issue[issue_id]" value="#{@issue.id}"
+
+        div class="form-row"
+          div class="form-group col-md-9"
+            input type="text" name="issue[name]" placeholder="Describe the issue in one sentence" class="form-control" id="name-field"
+            div id="name-field-feedback" class="invalid-feedback"
+
+          div class="form-group col-md-3"
+            select name="issue[priority]" class="custom-select"
+              - Issue.priorities.each do |k, v|    
+                option[value="#{v}", selected=("selected" if k=="normal")]
+                  = k                        
+        
+        div class="form-group"  
+          textarea type="text" name="issue[note]" placeholder="Provide more details here. Feel free to use markdown.
+          e.g. # H1 `inline code` **bold**" class="form-control" rows="10" id="note-field"
+          div id="note-field-feedback" class="invalid-feedback"
+
+        div class="form-group"
+          div class="custom-file"
+            input type="file" name="file" class="custom-file-input" multiple="multiple" id="file-field" 
+            label class="custom-file-label" for="customFile" Choose file(s)
+              
+        input type="submit" value="Submit" class="btn btn-primary mb-3 mr-2"        
+        a href="/projects/#{@project.id}" class="btn btn-outline-primary mb-3" Cancel
+
+      div class="uploads"
+
+    div class="col-md-6"
+      div id="md-preview" class="d-none mb-3"
+        span class="badge badge-secondary float-right" Issue
+        h1 id="md-preview-name"
+        p id="md-preview-note"

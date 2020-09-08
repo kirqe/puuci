@@ -1,0 +1,5 @@
+/node_modules
+/public/s
+dump.rdb
+*.DS_Store
+*.sqlite3

@@ -1,0 +1,43 @@
+div class="container-fluid"
+  div class="row"
+    div class="col-md-6"
+      form name="user" action="/settings" enctype="multipart/form-data" method='POST' autocomplete="off" class="mb-2" id="new-project-form"
+        input type="hidden" name="a" value="#{params[:a]}"
+        - from_token = @user.auth_token != params[:a]
+
+        h5 Public details:
+        div class="form-group"
+          label for="username" Username
+          input type="text" name="user[username]" value="#{@user.username}" placeholder="username" class="form-control" id="user-username-field" disabled=true
+          / div id="username-username-field-feedback" class="invalid-feedback"
+
+        div class="form-group"  
+          label for="about" About you
+          textarea type="text" name="user[about]" placeholder="I am a good boy" class="form-control" rows="5" id="user-about-field" =@user.about
+          / div id="project-note-field-feedback" class="invalid-feedback"
+          
+     
+        h5 Personal details:    
+        div class="form-group"
+          label for="email" Email
+          input type="text" name="user[email]" value="#{@user.email}" placeholder="email" class="form-control" id="user-email-field" disabled="disabled"
+          / div id="username-username-field-feedback" class="invalid-feedback"
+      
+        div class="form-group"
+          label for="new_password" New password
+          input name="user[new_password]" type="password" class="form-control" id="new_password" placeholder="New password" 
+
+        div class="form-group"
+          label for="password_confirmation" New password confirmation
+          input name="user[password_confirmation]" type="password" class="form-control" id="password_confirmation" placeholder="Password Confirmation"      
+
+        - if from_token
+          div class="form-group"
+            label for="old_password" Old password
+            input name="user[old_password]" type="password" class="form-control" id="old_password" placeholder="Old password"               
+
+        input type="submit" value="Submit" class="btn btn-primary mb-3 mr-2"
+        - if @user
+          a href="/u/#{@user.username}" class="btn btn-outline-primary mb-3" Cancel
+        
+

@@ -1,0 +1,35 @@
+div class="container-fluid"
+  div class="row"
+    div class="col-md-12"
+      h5 Edit user
+      == slim :nav
+
+  div class="row"
+    div class="col-md-6"
+      form name="user" action="/dashboard/users/#{@user.id}" method='POST' autocomplete="off" class="mb-2"
+        div class="form-group"
+          label for="username" Username
+          input type="text" name="username" value="#{@user.username}" placeholder="username" class="form-control" id="user-username-field"
+          / div id="username-username-field-feedback" class="invalid-feedback"
+ 
+        div class="form-group"
+          label for="email" Email
+          input type="text" name="email" value="#{@user.email}" placeholder="email" class="form-control" id="user-email-field" 
+          / div id="username-username-field-feedback" class="invalid-feedback"
+      
+        div class="form-group"
+          label for="password" New password
+          input name="password" type="password" class="form-control" id="password" placeholder="password" 
+
+        div class="form-group"
+          label for="role" Role
+          select name="role" class="custom-select"
+            - User.roles.each do |k, v|    
+              option[value="#{v}", selected=("selected" if k==@user.role)]
+                = k       
+  
+        input type="submit" value="Submit" class="btn btn-primary mb-3 mr-2"
+
+        a href="/dashboard/users" class="btn btn-outline-primary mb-3" Cancel
+        
+

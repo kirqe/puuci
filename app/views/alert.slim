@@ -1,0 +1,9 @@
+- mx ||= false
+
+- @flash = session.delete(:flash)
+- if @flash
+  - @flash.each do |flag, message|
+    - flag = :danger if flag == :error
+    - flag = :info   if flag == :notice
+    div class=["alert", "alert-#{flag}", ("mx-3" if mx)].compact.join(' ') role="alert"
+      == message

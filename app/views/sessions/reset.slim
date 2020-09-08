@@ -1,0 +1,17 @@
+div class="container-fluid h-100"
+  div class="row align-items-center h-90"
+    div class="col-md-4 mx-auto"
+      h1 Reset password
+      == slim :alert
+      
+      form name="reset" action="/reset" method="POST" class="mb-2" 
+        div class="form-group"
+          label for="email" Email address
+          input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email"
+
+        div class="actions"
+          button type="submit" class="btn btn-primary" Submit
+
+      a href="/signup" Don't have an account?
+      br
+      a href="/login" Already have an account?

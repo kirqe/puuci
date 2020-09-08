@@ -1,0 +1,44 @@
+div class="container-fluid"
+  div class="row"
+    div class="col-md-12"
+      h5 #{("Search" if request.path == "/search")} Issues
+  div class="row"
+    div class="col-md-12"
+
+      == will_paginate @issues
+      div class="tiles"
+        - @issues.each do |issue|
+          div class="tile"
+            span class="tile-priority #{priority_color(issue.priority)}"
+            
+            a href="/issues/#{issue.id}" class="tile-title" 
+              = issue.name
+
+            p class="tile-body"
+              = issue.note[0..200] + (issue.note.length > 200 ? "..." : "")
+
+            div class="tile-footer"
+              span class="badge badge-secondary mr-1"
+                i class="fa fa-file" aria-hidden="true"
+                =< issue.uploads.count
+              span class="badge badge-secondary mr-1"
+                i class="fa fa-comment" aria-hidden="true"
+                =< issue.comments.count 
+
+              - if current_user.is_admin? || issue.user == current_user
+                span class="mr-1 float-right"
+                  a href="/issues/#{issue.id}" data-confirm="Are you sure?" data-method="delete"
+                      i class="far fa-trash-alt" style="color: #e11d1d;" aria-hidden="true"
+                  
+                span class="mr-1 float-right"
+                  a href="/issues/#{ issue.id}/edit"
+                    i class="far fa-edit" aria-hidden="true"   
+
+              - if request.path == "/search"
+                span class="badge badge-secondary mr-1"
+                  =< issue.class.name.downcase
+
+      == will_paginate @issues
+
+
+

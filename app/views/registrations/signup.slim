@@ -1,0 +1,28 @@
+div class="container-fluid"
+  div class="row align-items-center h-90"
+    div class="col-md-4 mx-auto"
+      h1 Sign up
+
+      == slim :alert
+
+      form name="login" action="/signup" method="POST" class="mb-2" 
+        div class="form-group"
+          label for="username" Username
+          input name="user[username]" type="text" class="form-control" id="username" placeholder="Username"
+
+        div class="form-group"
+          label for="email" Email address
+          input name="user[email]" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email"
+          / small id="emailHelp" class="form-text text-muted"We'll never share your email with anyone else. 
+        
+        div class="form-group"
+          label for="password"Password
+          input name="user[password]" type="password" class="form-control" id="password" placeholder="Password"
+
+        div class="actions"
+          button type="submit" class="btn btn-primary" Submit
+
+
+      a href="/login" Already have an account?
+      br
+      a href="/reset" Forgotten your password?

@@ -1,0 +1,78 @@
+div class="container-fluid"
+  div class="pd-view"
+    div class="row"
+      div class="col-md-8"
+        div class="pd-view-main mb-3"
+          span class="badge badge-secondary float-right" Issue
+
+          h1 data-toggle="collapse" data-target="#collapseNote" aria-expanded="true" aria-controls="collapseNote"
+            = @issue.name
+
+          div class="markdown-body mb-4 collapse show" id="collapseNote"
+            == marked(@issue.note)
+
+          div class="detail-footer d-flex"
+            span class="mr-1 meta detail-footer-item mr-auto "
+              | by: 
+              a href="/u/#{@issue.user.username}" #{@issue.user.username}
+              br
+              | last updated: #{@issue.updated_at.strftime("%m/%d/%Y %I:%M")}
+              a< href="/projects/#{@issue.project_id}" [project]
+
+            - if current_user.is_admin? || @issue.user == current_user  
+              span class="mr-1 detail-footer-item mt-auto "
+                a href="/issues/#{@issue.id}/edit"
+                  i class="far fa-edit" aria-hidden="true"     
+
+              span class="mr-1 detail-footer-item mt-auto "
+                a href="/issues/#{@issue.id}" data-confirm="Are you sure?" data-method="delete"
+                    i class="far fa-trash-alt" style="color: #e11d1d;" aria-hidden="true"
+              
+      div class="col-md-4"
+        div class="pd-view-uploads mb-3"
+          h5 Uploads:
+          - @issue.uploads.each do |upload|
+            div class="upload-item mb-1"
+              - if current_user.is_admin? || @issue.user == current_user
+                a href="/uploads/#{upload.id}" data-confirm="Are you sure?" data-method="delete"
+                  i class="far fa-trash-alt" style="color: #e11d1d;" aria-hidden="true"
+              i< class="#{file_icon(upload)}" style="color: #586777;" aria-hidden="true"                  
+              a href='/s/#{upload.uploadable_id}/#{upload.id}#{upload.ext}' target='_blank' 
+                =< upload.filename
+
+      
+    div class="row"
+      div class="col-md-8" 
+        div class="pd-view-uploads mb-3"
+          div class="row"
+          h5 Discussion:
+
+          form name="comment" action="/comments" enctype="multipart/form-data" method='POST' autocomplete="off" class="mb-2" id="new-comment-form" 
+            input type="hidden" name="comment[issue_id]" value="#{@issue.id}"
+            div class="form-group"  
+              textarea type="text" name="comment[message]" placeholder="Write something..." class="form-control" rows="3" id="project-note-field"
+              div id="project-note-field-feedback" class="invalid-feedback"
+            input type="submit" value="Submit" class="btn btn-primary mb-3" 
+
+        div class="issue-comments"
+        - @issue.comments.order("created_at DESC").each.with_index(1) do |comment, idx|
+          - @count = @issue.comments.size + 1
+          div class=["issue-comment", ("emph" if params[:c].to_i == @count - idx)].compact.join(' ')
+            span class="comment-user pb-2"
+              a href="/issues/#{@issue.id}?c=#{@count - idx}" class="anc" ##{@count - idx}
+              a href="/u/#{comment.user.username}" class="comment-ul"
+                =< comment.user.username
+              - if comment.user == @issue.user
+                span< class="badge badge-success" author
+              / =< "#{comment.user.username}: "
+            span class="comment-message"  
+              == marked(comment.message)
+            
+            div class="comment-footer d-flex"
+              span class="meta mr-auto"
+                = @issue.updated_at.strftime("%m/%d/%Y %I:%M")
+
+              - if current_user.is_admin? || comment.user == current_user
+                span class="mr-1 "
+                  a href="/comments/#{comment.id}" data-confirm="Are you sure?" data-method="delete"
+                    i class="far fa-trash-alt" style="color: #e11d1d;" aria-hidden="true"

@@ -1,0 +1,31 @@
+
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
+// @import "bootstrap/variables";
+// @import "bootstrap/mixins";
+
+
+// $link-color: #4490e1;
+// $primary: #4490e1;
+$blue: #4490e1;
+$nav-pills-link-active-bg: #4490e1;
+$dropdown-link-active-bg: #4490e1;
+
+// $theme-colors: (
+//   "primary": #4490e1,
+//   "link-color": #4490e1
+// );
+
+$theme-colors: (
+  link-color: #4490e1,
+  primary: #4490e1,
+  "custom-color": #900
+);
+
+
+@import '../../../node_modules/bootstrap/';
+// @import '~bootstrap';
+
+
+

@@ -1,0 +1,58 @@
+div class="container-fluid"
+  div class="row"
+    div class="col-md-12"
+      h5 Activity for the last 24 hours
+
+  div class="row"
+    div class="col-md-12"
+      - if @resources.size == 0
+        h5 Nothing happend
+
+      == will_paginate @resources
+
+      div class="tiles" data-chart="#{@projects.map {|x| [ "'#{x.name}'", x.issues.not_draft.size] }}" 
+        - unless @resources.size == 0
+          div class="tile tile-chart"
+            canvas id="myChart"
+
+        - @resources.each do |resource|
+          div class="tile"
+            span class="tile-priority #{priority_color(resource.priority)}"
+            a href="/#{resource.class.name.downcase}s/#{resource.id}" class="tile-title" 
+              = resource.name
+
+            p class="tile-body"
+              = resource.note[0..200] + (resource.note.length > 200 ? "..." : "")
+
+            div class="tile-footer"
+              span class="badge badge-secondary mr-1"
+                i class="fa fa-file" aria-hidden="true"
+                =< resource.uploads.count
+
+              - if resource.class.name == "Project"
+                span class="badge badge-secondary mr-1"
+                  i class="fa fa-flag" aria-hidden="true"
+                  =< resource.issues.not_draft.count
+
+              - if resource.class.name == "Issue"
+                span class="badge badge-secondary mr-1"
+                  i class="fa fa-comment" aria-hidden="true"
+                  =< resource.comments.count
+
+              - if current_user.is_admin? || resource.user == current_user
+                span class="mr-1 float-right"
+                  a href="/#{resource.class.name.downcase}s/#{resource.id}" data-confirm="Are you sure?" data-method="delete"
+                      i class="far fa-trash-alt" style="color: #e11d1d;" aria-hidden="true"
+                  
+                span class="mr-1 float-right"
+                  a href="/#{resource.class.name.downcase}s/#{resource.id}/edit"
+                    i class="far fa-edit" aria-hidden="true" 
+
+              span class="badge badge-secondary mr-1"
+                =< resource.class.name.downcase
+
+      == will_paginate @resources
+
+
+
+

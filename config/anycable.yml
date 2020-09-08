@@ -1,0 +1,6 @@
+development:
+  redis_url: redis://localhost:6379
+  redis_channel: "__anycable__"
+production:
+  redis_url: redis://my.redis.io:6379
+  redis_channel: "__anycable__"

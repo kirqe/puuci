@@ -1,0 +1,35 @@
+div class="container-fluid"
+  div class="row"
+    div class="col-md-12"
+      h5 Users
+      == slim :nav
+      
+  div class="row"
+    div class="col-md-12"
+      == will_paginate @users
+      div class="table-responsive"
+        table class="table table-hover" id="myTable"
+          thead
+            th scope="col" #
+            th scope="col" username
+            th scope="col" email
+            th scope="col" role
+            th scope="col" 
+          tbody
+          - @users.each_with_index do |user, idx|
+            tr
+              td scope="row" = idx + 1
+              td: a href="/u/#{user.username}" #{user.username}
+              td = user.email
+              td = user.role
+              td 
+                span class="mr-1"
+                  a href="/dashboard/users/#{user.id}" data-confirm="Are you sure?" data-method="delete"
+                    i class="far fa-trash-alt" style="color: #e11d1d;" aria-hidden="true"
+
+                span class="mr-1"
+                  a href="/dashboard/users/#{user.id}/edit"
+                    i class="far fa-edit" aria-hidden="true"                    
+              
+      == will_paginate @users
+

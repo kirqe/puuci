@@ -1,0 +1,45 @@
+div class="container-fluid"
+  div class="row"
+    div class="col-md-12"
+      div class="d-flex"
+        h5 class="mr-auto" 
+          span #{("Search" if request.path == "/search")} Projects 
+          a href="/projects/new" class="btn btn-outline-primary btn-sm" New project
+      
+  div class="row"
+    div class="col-md-12"
+      == will_paginate @projects
+      div class="tiles"
+        - @projects.each do |project|
+          div class="tile"
+            span class="tile-priority #{priority_color(project.priority)}"              
+
+            a href="/projects/#{project.id}" class="tile-title" #{project.name}
+
+            p class="tile-body"
+              = project.note[0..200] + (project.note.length > 200 ? "..." : "")
+            / span class="text-muted"
+            div class="tile-footer"
+              span class="badge badge-secondary mr-1"
+                i class="fa fa-file" aria-hidden="true"
+                =< project.uploads.count
+              span class="badge badge-secondary mr-1"
+                i class="fa fa-flag" aria-hidden="true"
+                =< project.issues.not_draft.count
+
+              - if current_user.is_admin? || project.user == current_user
+                span class="mr-1 float-right"
+                  a href="/projects/#{project.id}" data-confirm="Are you sure?" data-method="delete"
+                    i class="far fa-trash-alt" style="color: #e11d1d;" aria-hidden="true"
+
+                span class="mr-1 float-right"
+                  a href="/projects/#{project.id}/edit"
+                    i class="far fa-edit" aria-hidden="true"  
+
+              - if request.path == "/search"
+                span class="badge badge-secondary mr-1"
+                  =< project.class.name.downcase              
+
+      == will_paginate @projects
+
+

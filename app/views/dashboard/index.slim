@@ -1,0 +1,25 @@
+div class="container-fluid"
+  div class="row"
+    div class="col-md-12"
+      h5 Dashboard 
+      == slim :nav
+
+  div class="row"
+    div class="col-md-5"
+      h5 Invite new user 
+      form name="inviation" action="/dashboard/users" method="POST"
+        div class="form-row"
+          div class="form-group col"
+            / label for="recipient-name" class="col-form-label" Recipient: 
+            input type="email" name="email" class="form-control" id="recipient-name" placeholder="john@doe.com"
+
+          div class="form-group col"
+            / label for="recipient-name" class="col-form-label" Recipient: 
+            input type="text" name="username" class="form-control" id="recipient-name" placeholder="john_d"
+
+        div class="form-group"
+          / label for="message-text" class="col-form-label" Message: 
+          textarea name="text" class="form-control" id="message-text" rows="3" placeholder="Any custom text that goes after the default message"
+              
+
+        button type="submit" class="btn btn-primary" Invite

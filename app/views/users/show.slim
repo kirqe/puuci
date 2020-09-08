@@ -1,0 +1,23 @@
+div class="container-fluid"
+  div class="row"
+    div class="col-md-8"
+      div class="card" style="width: 18rem;"
+      
+        div class="card-body"
+          h5 class="card-title" 
+            => @user.username
+          p class="card-text text-muted" = @user.about
+
+        ul class="list-group list-group-flush"
+          li class="list-group-item d-flex justify-content-between align-items-center"
+            a href="/u/#{@user.username}/issues" Issues:
+            span class="badge badge-primary badge-pill"
+              = @user.issues.not_draft.size
+          li class="list-group-item d-flex justify-content-between align-items-center"
+            a href="/u/#{@user.username}/projects" Projects:
+            span class="badge badge-primary badge-pill"
+              = @user.projects.not_draft.size
+          li class="list-group-item d-flex justify-content-between align-items-center"
+            | Comments:
+            span class="badge badge-primary badge-pill"
+              = @user.comments.size
