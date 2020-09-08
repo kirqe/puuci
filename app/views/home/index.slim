@@ -26,17 +26,17 @@ div class="container-fluid"
 
             div class="tile-footer"
               span class="badge badge-secondary mr-1"
-                i class="fa fa-file" aria-hidden="true"
+                i class="fas fa-file" aria-hidden="true"
                 =< resource.uploads.count
 
               - if resource.class.name == "Project"
                 span class="badge badge-secondary mr-1"
-                  i class="fa fa-flag" aria-hidden="true"
+                  i class="fas fa-flag" aria-hidden="true"
                   =< resource.issues.not_draft.count
 
               - if resource.class.name == "Issue"
                 span class="badge badge-secondary mr-1"
-                  i class="fa fa-comment" aria-hidden="true"
+                  i class="fas fa-comment" aria-hidden="true"
                   =< resource.comments.count
 
               - if current_user.is_admin? || resource.user == current_user

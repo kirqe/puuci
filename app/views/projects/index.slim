@@ -21,10 +21,10 @@ div class="container-fluid"
             / span class="text-muted"
             div class="tile-footer"
               span class="badge badge-secondary mr-1"
-                i class="fa fa-file" aria-hidden="true"
+                i class="fas fa-file" aria-hidden="true"
                 =< project.uploads.count
               span class="badge badge-secondary mr-1"
-                i class="fa fa-flag" aria-hidden="true"
+                i class="fas fa-flag" aria-hidden="true"
                 =< project.issues.not_draft.count
 
               - if current_user.is_admin? || project.user == current_user
