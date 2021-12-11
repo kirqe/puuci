@@ -1,44 +1,40 @@
+# frozen_string_literal: true
 
 class IssuesController < ApplicationController
-  get '/issues', :auth => ["user", "admin"] do
+  get '/issues', auth: %w[user admin] do
     @issues = Issue.includes(:comments, :uploads)
                    .not_draft
                    .paginate(page: params[:page], per_page: 30)
-    
+
     slim :'issues/index'
   end
 
-  get '/projects/:id/issues/new', :auth => ["user", "admin"] do
+  get '/projects/:id/issues/new', auth: %w[user admin] do
     @project = Project.find(params[:id])
 
-    draft = @project.issues.draft.where("user_id = ?", current_user.id).first
-    if draft
-      @issue = draft
-    else
-      @issue = @project.issues.create(user: current_user)
-    end
-  
+    draft = @project.issues.draft.where('user_id = ?', current_user.id).first
+    @issue = draft || @project.issues.create(user: current_user)
+
     slim :'issues/new'
-  end  
+  end
 
-
-  get '/issues/:id', :auth => ["user", "admin"] do
+  get '/issues/:id', auth: %w[user admin] do
     @issue = Issue.find(params[:id])
-  
+
     slim :'issues/show'
   end
-  
-  get '/issues/:id/edit', :auth => ["user", "admin"] do
+
+  get '/issues/:id/edit', auth: %w[user admin] do
     @issue = Issue.find(params[:id])
     authorize(@issue)
 
     slim :'issues/edit'
   end
 
-  patch '/issues/:id', :auth => ["user", "admin"] do
-    # fx ltr: id is taken from js but issue_id can also 
+  patch '/issues/:id', auth: %w[user admin] do
+    # fx ltr: id is taken from js but issue_id can also
     # be taken from hidden_field
-    @issue = Issue.find(params[:id]) 
+    @issue = Issue.find(params[:id])
     authorize(@issue)
 
     @issue.name = params[:issue][:name]
@@ -49,9 +45,12 @@ class IssuesController < ApplicationController
     used_to_be_draft = @issue.draft
 
     if @issue.save
-      NotificationWorker.perform_async({
-        user: current_user.username, 
-        message: { type: "Issue", resource: @issue.to_json}}) if used_to_be_draft
+      if used_to_be_draft
+        NotificationWorker.perform_async({
+                                           user: current_user.username,
+                                           message: { type: 'Issue', resource: @issue.to_json }
+                                         })
+      end
 
       reply_with_success(@issue)
     else
@@ -59,32 +58,30 @@ class IssuesController < ApplicationController
     end
   end
 
-
-
-  delete '/issues/:id', :auth => ["user", "admin"] do |id|
+  delete '/issues/:id', auth: %w[user admin] do |_id|
     @issue = Issue.find(params[:id])
     authorize(@issue)
     @issue.destroy
-    
-    flash :success, "You have successfully deleted the issue"
+
+    flash :success, 'You have successfully deleted the issue'
     redirect back
   end
-  
-  private
-    def reply_with_success(issue)
-      {
-        status: "success",
-        type: issue.class.name,
-        issue: issue
-      }.to_json
-    end
-    
-    def reply_with_error(issue)
-      {
-        status: "error",
-        issue: issue,
-        errors: issue.errors
-      }.to_json
-    end
 
+  private
+
+  def reply_with_success(issue)
+    {
+      status: 'success',
+      type: issue.class.name,
+      issue: issue
+    }.to_json
+  end
+
+  def reply_with_error(issue)
+    {
+      status: 'error',
+      issue: issue,
+      errors: issue.errors
+    }.to_json
+  end
 end

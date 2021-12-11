@@ -1,12 +1,14 @@
-CABLE_URL = ENV.fetch("CABLE_URL", "/cable")
+# frozen_string_literal: true
+
+CABLE_URL = ENV.fetch('CABLE_URL', '/cable')
 #  CABLE_URL="ws://localhost:9293/cable"
 require 'bundler'
 Bundler.require
 
 require 'require_all'
-require "lite_cable/server"
-require "anycable"
-require "litecable"
+require 'lite_cable/server'
+require 'anycable'
+require 'litecable'
 
 require_all 'app'
 

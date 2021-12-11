@@ -1,81 +1,78 @@
+# frozen_string_literal: true
+
 module Dashboard
   class UsersController < Dashboard::DashboardController
-    get '/dashboard/users', :auth => ["admin"] do
+    get '/dashboard/users', auth: ['admin'] do
       @users = User.all.paginate(page: params[:page], per_page: 30)
 
       slim :"dashboard/users/index"
     end
 
-    get "/dashboard/users/:user_id/edit", :auth => ["admin"] do
+    get '/dashboard/users/:user_id/edit', auth: ['admin'] do
       @user = User.find(params[:user_id])
-      
+
       slim :"dashboard/users/edit"
     end
 
-    post "/dashboard/users/:user_id", :auth => ["admin"] do
+    post '/dashboard/users/:user_id', auth: ['admin'] do
       @user = User.find(params[:user_id])
-      
+
       @user.username = params[:username]
       @user.email = params[:email]
       @user.role = params[:role].to_i
       @user.password = params[:password]
 
-      if @user.save 
-        flash :success, "You have successfully updated the user"
-        redirect back
+      if @user.save
+        flash :success, 'You have successfully updated the user'
       else
-        flash :error, "Something went wrong: #{@user.errors.full_messages.join(", ")}"
-        redirect back
+        flash :error, "Something went wrong: #{@user.errors.full_messages.join(', ')}"
       end
+
+      redirect back
     end
 
-
-    post '/dashboard/users', :auth => ["admin"] do 
-
+    post '/dashboard/users', auth: ['admin'] do
       @user = User.new
 
       if params[:username].empty?
-        un = params[:email].split("@")[0]
+        un = params[:email].split('@')[0]
         @user.username = "#{un}_#{SecureRandom.hex[0..5]}"
       else
         @user.username = params[:username]
       end
-      
+
       @user.email = params[:email]
-      
+
       @user.password = SecureRandom.hex[0..19]
 
-
-      
-      if @user.save 
+      if @user.save
         send_email_to(@user, params[:text])
 
-        flash :success, "You have successfully invited a new user"
-        redirect back
+        flash :success, 'You have successfully invited a new user'
       else
-        flash :error, "Something went wrong: #{@user.errors.full_messages.join(", ")}"
-        redirect back
+        flash :error, "Something went wrong: #{@user.errors.full_messages.join(', ')}"
       end
 
-      
-    end     
+      redirect back
+    end
 
-    delete '/dashboard/users/:id', :auth => ["admin"] do |id|    
+    delete '/dashboard/users/:id', auth: ['admin'] do |_id|
       @user = User.find(params[:id])
       @user.destroy
 
-      flash :success, "You have successfully deleted the user"
+      flash :success, 'You have successfully deleted the user'
       redirect back
     end
 
     private
-      def send_email_to(user, custom_text)
-        body = "Hey there! Here's your login link. 
-          You can only update your password once using this <a href='http://localhost:9292/login?a=#{user.auth_token}' target='_blank'>link</a>.
-          --
-          #{custom_text}"
-        EmailWorker.perform_async(user.email, "invitation", body)        
-      end    
+
+    def send_email_to(user, custom_text)
+      body = %("Hey there! Here's your login link.
+               You can only update your password once using this
+               <a href='http://localhost:9292/login?a=#{user.auth_token}' target='_blank'>link</a>.
+               --
+               #{custom_text}")
+      EmailWorker.perform_async(user.email, 'invitation', body)
+    end
   end
 end
-

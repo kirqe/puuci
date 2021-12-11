@@ -2,10 +2,9 @@
 
 ![](./demo.png)
 
-What's up with the name? - Those are just the first letters of the model names used. 
-
-Users can submit projects, issues and comment on issues. 
+Users can submit projects, issues and comment on issues.
 Issues and projects can have files(uploads) attached to them.
+When someone submits an issue a toast notification pops up.
 
 ### How to run
 
@@ -25,3 +24,5 @@ yarn
 rake db:create db:migrate db:seed
 foreman start
 ```
+
+Check the `Procfile`

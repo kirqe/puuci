@@ -1,43 +1,42 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
-
-gem 'sinatra'
-gem 'shotgun'
-gem 'puma'
-gem 'activerecord', :require => "active_record"
-gem 'sinatra-activerecord'
-gem 'pg'
-gem 'rake'
-gem 'slim'
+gem 'activerecord', require: 'active_record'
 gem 'bcrypt'
-gem 'sanitize'
+gem 'encrypted_cookie'
 gem 'kramdown'
 gem 'kramdown-parser-gfm'
-gem 'rouge'
-gem 'will_paginate', '~> 3.1.0'
-gem 'require_all'
-gem 'warden'
-gem 'encrypted_cookie'
+gem 'pg'
 gem 'pony'
-
+gem 'puma'
+gem 'rake'
+gem 'require_all'
+gem 'rouge'
+gem 'sanitize'
+gem 'shotgun'
+gem 'sinatra'
+gem 'sinatra-activerecord'
+gem 'slim'
+gem 'warden'
+gem 'will_paginate', '~> 3.1.0'
 
 # https://github.com/cvonkleist/encrypted_cookie
 
-
-
-gem "litecable"
-gem "websocket"
-gem "anycable", "~> 1.0"
-gem "sidekiq"
-gem "redis"
+gem 'anycable', '~> 1.0'
+gem 'litecable'
+gem 'redis'
+gem 'sidekiq'
+gem 'websocket'
 # gem 'padrino-helpers'
 
 group :development, :test do
-  gem 'rack-test'
-  gem 'rspec'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'selenium-webdriver'
-  gem 'geckodriver-helper'
   gem 'faker'
+  gem 'geckodriver-helper'
+  gem 'rack-test'
+  gem 'rspec'
+  gem 'rubocop', require: false
+  gem 'selenium-webdriver'
 end

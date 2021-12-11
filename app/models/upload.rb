@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Upload < ActiveRecord::Base
   after_destroy :remove_upload
 
@@ -7,10 +9,9 @@ class Upload < ActiveRecord::Base
   belongs_to :uploadable, polymorphic: true
 
   private
-    def remove_upload
-      filename = "public/s/#{uploadable_id}/#{id}#{ext}"
-      File.delete(filename) if File.exists?(filename)
-    end
+
+  def remove_upload
+    filename = "public/s/#{uploadable_id}/#{id}#{ext}"
+    File.delete(filename) if File.exist?(filename)
+  end
 end
-
-

@@ -1,23 +1,25 @@
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
   has_secure_password
-  
+
   before_save :create_auth_token
   before_save { self.email = email.downcase }
-  
+
   validates :username,
-    presence: true,
-    uniqueness: true
+            presence: true,
+            uniqueness: true
 
-  EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+  EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.freeze
   validates :email,
-    presence: true,
-    uniqueness: true,
-    format: { with: EMAIL_REGEX, message: "invalid format" }
+            presence: true,
+            uniqueness: true,
+            format: { with: EMAIL_REGEX, message: 'invalid format' }
 
-  validates :password, 
-    presence: true,
-    length: { minimum: 6, maximum: 20 },
-    allow_nil: true
+  validates :password,
+            presence: true,
+            length: { minimum: 6, maximum: 20 },
+            allow_nil: true
 
   has_many :projects, dependent: :destroy
   has_many :issues, dependent: :destroy
@@ -42,6 +44,6 @@ class User < ActiveRecord::Base
   end
 
   def create_auth_token
-    self.auth_token = Digest::SHA1.hexdigest([self.email, Time.now].join)
+    self.auth_token = Digest::SHA1.hexdigest([email, Time.now].join)
   end
 end

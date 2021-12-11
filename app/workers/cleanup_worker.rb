@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 class CleanupWorker
   include Sidekiq::Worker
 
+  def perform(_args)
+    p '------'
 
-  def perform(args)
-    p "------"
-
-    p "-----"
+    p '-----'
   end
 end

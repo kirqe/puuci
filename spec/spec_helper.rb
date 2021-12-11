@@ -1,22 +1,23 @@
-ENV["RACK_ENV"] = "test"
+# frozen_string_literal: true
+
+ENV['RACK_ENV'] = 'test'
 # ENV['SERVER_NAME'] = "localhost:9393"
 
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path('../config/environment', __dir__)
 # require File.expand_path("../../lib/sinatra/helpers", __FILE__)
 require_relative '../lib/sinatra/helpers'
 # require 'bundler'
 # require 'sinatra'
 
-require "rspec"
-require "capybara"
-require "capybara/rspec"
-require "capybara/dsl"
+require 'rspec'
+require 'capybara'
+require 'capybara/rspec'
+require 'capybara/dsl'
 require 'rack/test'
 # require "sinatra/activerecord"
 # Bundler.require(:default, :test)
 # require 'will_paginate'
 require 'database_cleaner'
-
 
 # Capy
 Capybara.register_driver :selenium do |app|
@@ -24,13 +25,13 @@ Capybara.register_driver :selenium do |app|
 end
 
 Capybara.server = :puma
-Capybara.app = Rack::Builder.parse_file(File.expand_path('../../config.ru', __FILE__)).first  
+Capybara.app = Rack::Builder.parse_file(File.expand_path('../config.ru', __dir__)).first
 Capybara.run_server = true
 Capybara.default_max_wait_time = 10
 Capybara.current_driver = :selenium
 
 def app
-  Rack::Builder.parse_file(File.expand_path('../../config.ru', __FILE__)).first  
+  Rack::Builder.parse_file(File.expand_path('../config.ru', __dir__)).first
 end
 
 # R
@@ -56,10 +57,7 @@ RSpec.configure do |config|
   end
 end
 
-
-
 # Capybara.configure { |config| config.default_host = "http://localhost:9393" }
-
 
 # Capybara.configure do |config|
 #   config.run_server = false
@@ -71,5 +69,3 @@ end
 # Capybara.register_driver :rack_test do |app|
 #   Capybara::RackTest::Driver.new(app, headers: { 'HTTP_USER_AGENT' => 'Capybara' })
 # end
-
-# 

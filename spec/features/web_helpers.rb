@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # require 'spec_helper'
 
 def invalid_sign_up
@@ -45,8 +47,6 @@ def create_new_project_with_file
   click_button 'Submit'
 end
 
-def create_new_issue_for(project)
-end
+def create_new_issue_for(project); end
 
-def create_new_comment_for(issue)
-end
+def create_new_comment_for(issue); end
